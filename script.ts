@@ -6,7 +6,6 @@ canvas.width = document.body.clientWidth;
 canvas.height = document.body.clientHeight;
 
 const screenRatio = Math.floor(window.innerWidth / window.innerHeight);
-const treeLength = window.innerHeight / 3;
 
 
 
@@ -14,7 +13,7 @@ const random = {
     leafRadius: () => (Math.random() * 20) + 10,
     hex: (): string => `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})`,
     treeAngle: (): number => (Math.random() * 20) + 5,
-    branchWidth: (): number => ((Math.random() * 30) + 20) / screenRatio,
+    branchWidth: (): number => ((Math.random() * (window.innerWidth * 5 / 100)) + 20) / screenRatio,
     leafLimit: (): number => Math.floor(Math.random() * 5) + 5,
     nop: (num: number) => Math.round(Math.random()) == 1 ? -num : num,
     curve: (): number => Math.random() * 10
@@ -22,7 +21,8 @@ const random = {
 
 let randomAngle = random.treeAngle(),
     leafLimit = random.leafLimit(),
-    treeCurve = random.curve();
+    treeCurve = random.curve(),
+    treeLength = window.innerWidth * 10 / 100 + window.innerHeight * 10 / 100;
 
 function drawTree(startX: number, startY: number, length: number, angle: number, branchWidth: number, color: { branch: string, leaf: string }) {
     ctx.beginPath();
@@ -61,6 +61,8 @@ function drawTree(startX: number, startY: number, length: number, angle: number,
 
     ctx.restore();
 
+    console.log(treeLength);
+
 }
 
 function toRadians(degrees: number): number {
@@ -73,5 +75,7 @@ drawTree(canvas.width / 2, canvas.height, treeLength, 0, random.branchWidth(), {
 window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    drawTree(canvas.width / 2, canvas.height, canvas.height / 3, 0, random.branchWidth(), { branch: random.hex(), leaf: random.hex() });
+    treeLength = window.innerWidth * 10 / 100 + window.innerHeight * 10 / 100;
+ 
+    drawTree(canvas.width / 2, canvas.height, treeLength, 0, random.branchWidth(), { branch: random.hex(), leaf: random.hex() });
 })
